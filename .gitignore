@@ -1,0 +1,4 @@
+*.swp
+*.pyc
+oauth.ini
+local_config.py
