@@ -1,7 +1,47 @@
 {
-    "54321": {
+    "we are in harmony": {
         "hero": "Zenyatta",
-        "line": "5 4 3 2 1",
-        "voice": "http://rpboyer15.github.io/sounds-of-overwatch/vo/vo_hero/Zenyatta/Zenyatta%20-%20Default/5%204%203%202%201.mp3"
-    } 
+        "line": "We are in harmony.",
+        "voice": "http://rpboyer15.github.io/sounds-of-overwatch/vo/vo_hero/Zenyatta/Zenyatta%20-%20Default/we%20are%20in%20harmony.mp3"
+    },
+   "death is whimsical today": {
+        "hero": "Zenyatta",
+        "line": "Death is whimsical today.",
+        "voice": "http://rpboyer15.github.io/sounds-of-overwatch/vo/vo_hero/Zenyatta/Zenyatta%20-%20Default/death%20is.mp3"
+   },
+   "free your mind": {
+        "hero": "Zenyatta",
+        "line": "Free your mind.",
+        "voice": "http://rpboyer15.github.io/sounds-of-overwatch/vo/vo_hero/Zenyatta/Zenyatta%20-%20Default/free%20your%20mind.mp3"
+   },
+   "i dreamt i was a butterfly": {
+       "hero": "Zenyatta",
+       "line": "I dreamt I was a butterfly.",
+       "voice": "http://rpboyer15.github.io/sounds-of-overwatch/vo/vo_hero/Zenyatta/Zenyatta%20-%20Default/i%20dreamt.mp3"
+   },
+   "i think therefore i am": {
+       "hero": "Zenyatta",
+       "line": "I think therefore I am.",
+       "voice": "http://rpboyer15.github.io/sounds-of-overwatch/vo/vo_hero/Zenyatta/Zenyatta%20-%20Default/i%20think%20therefore%20i%20am.mp3"
+   },
+   "i will not juggle": {
+       "hero": "Zenyatta",
+       "line": "I will not juggle.",
+       "voice": "http://rpboyer15.github.io/sounds-of-overwatch/vo/vo_hero/Zenyatta/Zenyatta%20-%20Default/i%20will%20not.mp3"
+   },
+   "life is more than a series of ones and zeroes": {
+       "hero": "Zenyatta",
+       "line": "Life is more than a series of ones and zeroes.",
+       "voice": "http://rpboyer15.github.io/sounds-of-overwatch/vo/vo_hero/Zenyatta/Zenyatta%20-%20Default/life%20is%20more.mp3"
+   },
+   "peace and blessings be upon you all": {
+       "hero": "Zenyatta",
+       "line": "Peace and blessings be upon you all.",
+       "voice": "http://rpboyer15.github.io/sounds-of-overwatch/vo/vo_hero/Zenyatta/Zenyatta%20-%20Default/peace%20and%20blessings.mp3"
+   },
+   "the iris embraces you": {
+       "hero": "Zenyatta",
+       "line": "The Iris embraces you.",
+       "voice": "http://rpboyer15.github.io/sounds-of-overwatch/vo/vo_hero/Zenyatta/Zenyatta%20-%20Default/the%20iris%20embraces.mp3"
+   }
 }
