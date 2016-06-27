@@ -13,7 +13,7 @@ This is currently in beta and is a work in progress. Feel free to send me a pull
 
 ## Known issues:
 
-* `mapping.json` is incomplete (currently only some of Zenyatta, Zarya, and some ult lines)
+* `mapping.json` is incomplete (currently only some of Zenyatta, Zarya, and some ult lines), the source I'm pulling it from is incomplete :(
 * The way I'm handling text normalization will not work for certain emotes (like D.Va's "Winky Face")
 * Basically no error checking at all
 * Eventually I will move the JSON file to a Google Sheet, and export to CSV

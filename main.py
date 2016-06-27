@@ -1,6 +1,8 @@
 
 import json
+import logging
 import re
+import time
 
 import praw
 #import OAuth2Util
@@ -23,12 +25,13 @@ COMMENT_TEMPLATE = '''
 
 ^I ^am ^a ^bot! ^Check ^out ^out ^my ^source ^code ^on [^Github](https://github.com/chrisying/overwatch-voice-bot)^! ^I ^am ^still ^in ^beta, ^please ^report ^issues ^by ^messaging ^me ^directly!
 '''
+logging.basicConfig(level=logging.INFO)
 
 def load_mapping():
     return json.loads(open(MAPPING_FILE).read())
 
 def ignore_comment(c):
-    if c.author == USERNAME:
+    if str(c.author) == USERNAME:
         return True
 
 def normalize_string(s):
@@ -43,33 +46,53 @@ def construct_reply(data):
     return output
 
 def main():
+    logging.log(logging.INFO, 'Starting up bot.....')
+
     # Load mapping configuration before launching bot
+    logging.log(logging.INFO, 'Loading mappings.....')
     mapping = load_mapping()
+    logging.log(logging.INFO, 'Finished loading mappings.')
 
     # Initialize Reddit API
+    logging.log(logging.INFO, 'Initializing and logging into %s.....' % USERNAME)
     r = praw.Reddit(user_agent=USER_AGENT)
     r.login(username=USERNAME, password=PASSWORD, disable_warning=True)
+    logging.log(logging.INFO, 'Done initializing API.')
+
 
     # TODO: eventually migrate to oauth, doesn't quite work yet
     #o = OAuth2Util.OAuth2Util(r)
     #o.refresh()
 
+    logging.log(logging.INFO, 'Starting up comment stream.....')
     stream = praw.helpers.comment_stream(r, SUBREDDIT, limit=CHUNK_SIZE, verbosity=0)
 
     # Ignore first CHUNK_SIZE since they could be duplicate
     for i in range(CHUNK_SIZE):
-        print 'Ignored: ' + next(stream).body
+        #print 'Ignored: ' + next(stream).body
+        next(stream).body
+    logging.log(logging.INFO, 'Done initializing stream.')
 
     # Main loop, comment_stream infinitely yields new comments
     for c in stream:
         if ignore_comment(c):
+            #logging.log(logging.INFO, 'Ignored comment: %s' % c.body)
             continue
 
         normal = normalize_string(c.body)
         if normal in mapping:
-            print 'Responded to comment: %s' % c
-            reply = construct_reply(mapping[normal])
-            c.reply(reply)
+            logging.log(logging.INFO, 'Matched comment: %s' % c.body)
+            try:
+                reply = construct_reply(mapping[normal])
+                c.reply(reply)
+                logging.log(logging.INFO, 'Responded to comment: %s' % c.body)
+            except praw.errors.RateLimitExceeded as e:
+                logging.log(logging.INFO, 'Got RateLimitExceeded, sleeping for %d seconds' % e.sleep_time)
+                time.sleep(e.sleep_time)
+        else:
+            #logging.log(logging.INFO, 'Unmatched comment: %s' % c.body)
+            pass
+
 
 if __name__ == '__main__':
     main()
