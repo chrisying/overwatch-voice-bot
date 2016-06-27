@@ -5,10 +5,14 @@ import re
 import praw
 #import OAuth2Util
 
-from local_config import *
+from local_config import (
+        USER_AGENT,
+        USERNAME,
+        PASSWORD,
+        SUBREDDIT
+)
 
 # Public configs go here
-SUBREDDIT = 'fc_bot_test'
 CHUNK_SIZE = 10
 MAPPING_FILE = 'mapping.json'
 NORMALIZE_REGEX = re.compile('[^a-zA-Z0-9 ]')
