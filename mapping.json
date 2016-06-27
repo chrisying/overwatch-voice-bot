@@ -155,6 +155,11 @@
         "line": "Embrace tranquility.",
         "voice": "http://rpboyer15.github.io/sounds-of-overwatch/vo/vo_hero/Zenyatta/Zenyatta%20-%20Default/embrace%20tranquility.mp3"
     },
+    "pass into the iris": {
+        "hero": "Zenyatta",
+        "line": "Pass into the Iris.",
+        "voice": "http://rpboyer15.github.io/sounds-of-overwatch/vo/vo_hero/Zenyatta/Zenyatta%20-%20Default/pass%20into.mp3"
+    },
     "we are in harmony": {
         "hero": "Zenyatta",
         "line": "We are in harmony.",

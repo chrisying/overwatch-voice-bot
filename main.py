@@ -72,6 +72,10 @@ def main():
         #print 'Ignored: ' + next(stream).body
         next(stream).body
     logging.log(logging.INFO, 'Done initializing stream.')
+    logging.log(logging.INFO, 'Parsing comments now:\n-----')
+
+    total_counter = 0
+    match_counter = 0
 
     # Main loop, comment_stream infinitely yields new comments
     for c in stream:
@@ -79,6 +83,7 @@ def main():
             #logging.log(logging.INFO, 'Ignored comment: %s' % c.body)
             continue
 
+        total_counter += 1
         normal = normalize_string(c.body)
         if normal in mapping:
             logging.log(logging.INFO, 'Matched comment: %s' % c.body)
@@ -86,12 +91,16 @@ def main():
                 reply = construct_reply(mapping[normal])
                 c.reply(reply)
                 logging.log(logging.INFO, 'Responded to comment: %s' % c.body)
+                match_counter += 1
             except praw.errors.RateLimitExceeded as e:
                 logging.log(logging.INFO, 'Got RateLimitExceeded, sleeping for %d seconds' % e.sleep_time)
                 time.sleep(e.sleep_time)
         else:
             #logging.log(logging.INFO, 'Unmatched comment: %s' % c.body)
             pass
+
+        if total_counter % 100 == 0:
+            logging.log(logging.INFO, 'Total comments considered: %d' % total_counter)
 
 
 if __name__ == '__main__':
