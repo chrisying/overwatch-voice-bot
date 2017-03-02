@@ -6,15 +6,9 @@ import time
 import praw
 #import OAuth2Util
 
-from local_config import (
-        USER_AGENT,
-        USERNAME,
-        PASSWORD,
-        SUBREDDIT
-)
+from local_config import *
 
 # Public configs go here
-CHUNK_SIZE = 10
 MAPPING_FILE = 'mapping.tsv'
 NORMALIZE_REGEX = re.compile('[^a-zA-Z0-9 ]')
 COMMENT_TEMPLATE = '''
@@ -51,7 +45,8 @@ def ignore_comment(comment):
 def normalize_string(s):
     # Removes punctuation from string and lowercases
     # TODO: create "special mappings" file which includes punctuation based
-    # voice lines like D.Va's ;) emote
+    #       voice lines like D.Va's ;) emote
+    # TODO: consider removing spaces as well?
     return NORMALIZE_REGEX.sub('', s).lower()
 
 class VoiceLineBot:
@@ -66,21 +61,21 @@ class VoiceLineBot:
 
         # Initialize Reddit API
         logging.log(logging.INFO, 'Initializing and logging into %s.....' % USERNAME)
-        self.reddit = praw.Reddit(user_agent=USER_AGENT)
-        self.reddit.login(username=USERNAME, password=PASSWORD, disable_warning=True)
+        self.reddit = praw.Reddit(client_id=CLIENT_ID,
+                                  client_secret=CLIENT_SECRET,
+                                  password=PASSWORD,
+                                  user_agent=USER_AGENT,
+                                  username=USERNAME)
         logging.log(logging.INFO, 'Done initializing API.')
 
-        # TODO: eventually migrate to oauth, doesn't quite work yet
-        #o = OAuth2Util.OAuth2Util(r)
-        #o.refresh()
-
         logging.log(logging.INFO, 'Starting up comment stream.....')
-        self.stream = praw.helpers.comment_stream(self.reddit, SUBREDDIT, limit=CHUNK_SIZE, verbosity=0)
+        self.stream = self.reddit.subreddit(SUBREDDIT).stream.comments()
 
-        # Ignore first CHUNK_SIZE since they could be duplicate
-        for i in range(CHUNK_SIZE):
-            #print 'Ignored: ' + next(stream).body
-            next(self.stream).body
+        # Ignore first 100 comments (could be historical)
+        # TODO: if there are less than 100 comments, this blocks
+        #for i in range(100):
+        #    next(self.stream)
+
         logging.log(logging.INFO, 'Done initializing stream.')
         logging.log(logging.INFO, 'Parsing comments now:\n-----')
 
@@ -98,9 +93,10 @@ class VoiceLineBot:
                 comment.reply(reply)
                 logging.log(logging.INFO, 'Responded to comment: %s' % comment.body)
                 self.match_counter += 1
-            except praw.errors.RateLimitExceeded as e:
-                logging.log(logging.INFO, 'Got RateLimitExceeded, sleeping for %d seconds' % e.sleep_time)
-                time.sleep(e.sleep_time)
+            except Exception as e:
+                print 'Error: %s' % e
+                #logging.log(logging.INFO, 'Got RateLimitExceeded, sleeping for %d seconds' % e.sleep_time)
+                #time.sleep(e.sleep_time)
         else:
             #logging.log(logging.INFO, 'Unmatched comment: %s' % c.body)
             pass
@@ -109,7 +105,7 @@ class VoiceLineBot:
         if self.total_counter % 100 == 0:
             logging.log(logging.INFO, 'Total comments considered: %d' % self.total_counter)
         if self.match_counter % 10 == 0:
-            logging.log(logging.INFO, 'Matched comments: %d' % self.matched_counter)
+            logging.log(logging.INFO, 'Matched comments: %d' % self.match_counter)
 
     def main_loop(self):
         # Main loop, stream infinitely yields new comments

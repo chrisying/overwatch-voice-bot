@@ -15,8 +15,7 @@ Supported Voice lines can be found at: https://docs.google.com/spreadsheets/d/1V
 
 ## Known issues:
 
-* MY SOURCE FOR VOICE LINE AUDIO FILES IS DOWN. I NEED A NEW SOURCE OTHERWISE THIS IS ALL BROKEN. UPDATE THE GOOGLE SHEETS.
-* `mapping.tsv` is incomplete (currently only some of Zenyatta, Zarya, and some ult lines), the source I'm pulling it from is incomplete :(
+* Have not gotten around to adding all lines (audio files can be found [here](http://overwatch.gamepedia.com/Category:Quotations))
 * The way I'm handling text normalization will not work for certain emotes (like D.Va's "Winky Face")
 * Basically no error checking at all
 

@@ -1,2 +1,1 @@
-praw==3.5.0
-praw-oauth2util==0.3.5
+praw==4.4.0
