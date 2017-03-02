@@ -16,7 +16,9 @@ COMMENT_TEMPLATE = '''
 
 -----
 
-^I ^am ^a ^bot! ^Check ^out ^out ^my ^source ^code ^on [^Github](https://github.com/chrisying/overwatch-voice-bot)^! ^I ^am ^still ^in ^beta, ^please ^report ^issues ^by ^messaging ^me ^directly!
+^^I ^^am ^^a ^^bot! ^^Check ^^out ^^out ^^my ^^source ^^code ^^on [^^Github](https://github.com/chrisying/overwatch-voice-bot)^^! ^^I ^^am ^^still ^^in ^^beta, ^^please ^^report ^^issues ^^by ^^messaging ^^me ^^directly!
+
+^^Why ^^is ^^BLANK ^^voice ^^line ^^not ^^working? ^^Because ^^I ^^haven't ^^gotten ^^around ^^to ^^adding ^^it ^^yet. ^^Feel ^^free ^^to ^^contribute ^^voice ^^line ^^entries ^^in ^^the ^^Github ^^project.
 '''
 logging.basicConfig(level=logging.INFO)
 
@@ -44,9 +46,8 @@ def ignore_comment(comment):
 
 def normalize_string(s):
     # Removes punctuation from string and lowercases
-    # TODO: create "special mappings" file which includes punctuation based
+    # TODO: create "exact mappings" file which includes punctuation based
     #       voice lines like D.Va's ;) emote
-    # TODO: consider removing spaces as well?
     return NORMALIZE_REGEX.sub('', s).lower()
 
 class VoiceLineBot:
@@ -68,7 +69,7 @@ class VoiceLineBot:
                                   username=USERNAME)
         logging.log(logging.INFO, 'Done initializing API.')
 
-        logging.log(logging.INFO, 'Starting up comment stream.....')
+        logging.log(logging.INFO, 'Starting up comment stream in /r/%s.....' % SUBREDDIT)
         self.stream = self.reddit.subreddit(SUBREDDIT).stream.comments()
 
         # Ignore first 100 comments (could be historical)
