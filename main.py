@@ -99,8 +99,6 @@ class VoiceLineBot:
                     logging.log(logging.INFO, 'Matched comments: %d' % self.match_counter)
             except Exception as e:
                 logging.log(logging.ERROR, 'Exception: %s' % e)
-                #logging.log(logging.INFO, 'Got RateLimitExceeded, sleeping for %d seconds' % e.sleep_time)
-                #time.sleep(e.sleep_time)
         else:
             #logging.log(logging.INFO, 'Unmatched comment: %s' % c.body)
             pass
@@ -111,11 +109,16 @@ class VoiceLineBot:
 
     def main_loop(self):
         # Main loop, stream infinitely yields new comments
-        for c in self.stream:
+        while True:
+            try:
+                c = next(self.stream)
+            except Exception as e:
+                logging.log(logging.ERROR, 'Exception: %s' % e)
+                continue
+
             if ignore_comment(c):
                 #logging.log(logging.INFO, 'Ignored comment: %s' % c.body)
                 continue
-
             self.handle_comment(c)
 
 
