@@ -20,6 +20,7 @@ COMMENT_TEMPLATE = '''
 
 ^^Why ^^is ^^BLANK ^^voice ^^line ^^not ^^working? ^^Because ^^I ^^haven't ^^gotten ^^around ^^to ^^adding ^^it ^^yet. ^^Feel ^^free ^^to ^^contribute ^^voice ^^line ^^entries ^^in ^^the ^^Github ^^project.
 '''
+ERROR_LIMIT = 10
 logging.basicConfig(level=logging.INFO)
 
 def load_mapping():
@@ -109,16 +110,27 @@ class VoiceLineBot:
 
     def main_loop(self):
         # Main loop, stream infinitely yields new comments
+        consecutive_errors = 0
+        erroring = False
         while True:
             try:
                 c = next(self.stream)
+                erroring = False
             except Exception as e:
                 logging.log(logging.ERROR, 'Exception: %s' % e)
+                if erroring:
+                    consecutive_errors += 1
+                    if consecutive_errors >= ERROR_LIMIT:
+                        sys.exit("Error limit reached, killing process")
+                else:
+                    erroring = True
+                    consecutive_errors = 1
                 continue
 
             if ignore_comment(c):
                 #logging.log(logging.INFO, 'Ignored comment: %s' % c.body)
                 continue
+
             self.handle_comment(c)
 
 
