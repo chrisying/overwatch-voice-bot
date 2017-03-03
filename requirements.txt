@@ -1,2 +1,2 @@
 praw==4.4.0
-unidecode=0.04.20
+unidecode==0.04.20
