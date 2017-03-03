@@ -4,7 +4,7 @@ import re
 import time
 
 import praw
-#import OAuth2Util
+import unidecode
 
 from local_config import *
 
@@ -27,6 +27,7 @@ def load_mapping():
     # Parses mapping file as tsv
     # Format: first line is headers (ignore)
     # Following lines: normalized\thero\toriginal\texact\tvoice
+    # Note: this function reads mapping.tsv as UTF-8 but PRAW reads comments as unicode
     mapping = {}
     with open(MAPPING_FILE) as f:
         f.readline()    # Read and ignore header
@@ -53,10 +54,9 @@ def ignore_comment(comment):
         return True
 
 def normalize_string(s):
-    # Removes punctuation from string and lowercases
-    # TODO: create "exact mappings" file which includes punctuation based
-    #       voice lines like D.Va's ;) emote
-    return NORMALIZE_REGEX.sub('', s).lower()
+    # Converts unicdoe to ASCII, removes punctuation from string, lowercases
+    # Input must be unicode
+    return NORMALIZE_REGEX.sub('', unidecode.unidecode(s)).lower()
 
 class VoiceLineBot:
 
