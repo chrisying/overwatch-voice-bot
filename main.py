@@ -99,7 +99,7 @@ class VoiceLineBot:
                 if self.match_counter % 10 == 0:
                     logging.log(logging.INFO, 'Matched comments: %d' % self.match_counter)
             except Exception as e:
-                logging.log(logging.ERROR, 'Exception: %s' % e)
+                logging.log(logging.ERROR, 'Error replying to comment, %s: %s' % (e.__class__.__name__, e.message)
         else:
             #logging.log(logging.INFO, 'Unmatched comment: %s' % c.body)
             pass
@@ -117,11 +117,12 @@ class VoiceLineBot:
                 c = next(self.stream)
                 erroring = False
             except Exception as e:
-                logging.log(logging.ERROR, 'Exception: %s' % e)
+                logging.log(logging.ERROR, 'Error getting next comment, %s: %s' % (e.__class__.__name__, e.message)
                 if erroring:
                     consecutive_errors += 1
                     if consecutive_errors >= ERROR_LIMIT:
                         sys.exit("Error limit reached, killing process")
+                    time.sleep(consecutive_errors ** 2) # quadratic backoff
                 else:
                     erroring = True
                     consecutive_errors = 1
