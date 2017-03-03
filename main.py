@@ -10,7 +10,7 @@ from local_config import *
 
 # Public configs go here
 MAPPING_FILE = 'mapping.tsv'
-NORMALIZE_REGEX = re.compile('[^a-zA-Z0-9 ]')
+NORMALIZE_REGEX = re.compile('[^a-zA-Z0-9]')
 COMMENT_TEMPLATE = '''
 [%s](%s) (Sound warning: %s)
 
@@ -32,7 +32,8 @@ def load_mapping():
         f.readline()    # Read and ignore header
         for line in f.xreadlines():
             toks = line.split('\t')
-            mapping[toks[0]] = {
+            key = toks[0].replace(' ', '')
+            mapping[key] = {
                     'hero': toks[1],
                     'line': toks[2],
                     'voice': toks[3]
