@@ -16,9 +16,9 @@ COMMENT_TEMPLATE = '''
 
 -----
 
-^^I ^^am ^^a ^^bot! ^^Check ^^out ^^out ^^my ^^source ^^code ^^on [^^Github](https://github.com/chrisying/overwatch-voice-bot)^^! ^^I ^^am ^^still ^^in ^^beta, ^^please ^^report ^^issues ^^by ^^messaging ^^me ^^directly!
+^^Bleep ^^Bloop! ^^I ^^am ^^a ^^bot! ^^Report ^^issues ^^by ^^directly ^^messaging ^^me.
 
-^^Why ^^is ^^BLANK ^^voice ^^line ^^not ^^working? ^^Because ^^I ^^haven't ^^gotten ^^around ^^to ^^adding ^^it ^^yet. ^^Feel ^^free ^^to ^^contribute ^^voice ^^line ^^entries ^^in ^^the ^^Github ^^project.
+[^^Github](https://github.com/chrisying/overwatch-voice-bot) [^^Supported ^^lines](https://github.com/chrisying/overwatch-voice-bot/blob/master/mapping.tsv)
 '''
 ERROR_LIMIT = 10
 logging.basicConfig(level=logging.INFO)
@@ -26,7 +26,7 @@ logging.basicConfig(level=logging.INFO)
 def load_mapping():
     # Parses mapping file as tsv
     # Format: first line is headers (ignore)
-    # Following lines: normalized\thero\toriginal\tvoice
+    # Following lines: normalized\thero\toriginal\texact\tvoice
     mapping = {}
     with open(MAPPING_FILE) as f:
         f.readline()    # Read and ignore header
@@ -36,8 +36,14 @@ def load_mapping():
             mapping[key] = {
                     'hero': toks[1],
                     'line': toks[2],
-                    'voice': toks[3]
+                    'voice': toks[4]
             }
+            if toks[3]:
+                mapping[toks[2]] = {
+                        'hero': toks[1],
+                        'line': toks[2],
+                        'voice': toks[4]
+                }
     return mapping
 
 def ignore_comment(comment):
@@ -87,27 +93,33 @@ class VoiceLineBot:
 
     def handle_comment(self, comment):
         # Handles responding or passing a comment
-        normal = normalize_string(comment.body)
-        if normal in self.mapping:
-            logging.log(logging.INFO, 'Matched comment: %s' % comment.body)
-            try:
-                data = self.mapping[normal]
-                reply = COMMENT_TEMPLATE % (data['line'], data['voice'], data['hero'])
-                comment.reply(reply)
-                logging.log(logging.INFO, 'Responded to comment: %s' % comment.body)
-                self.match_counter += 1
-
-                if self.match_counter % 10 == 0:
-                    logging.log(logging.INFO, 'Matched comments: %d' % self.match_counter)
-            except Exception as e:
-                logging.log(logging.ERROR, 'Error replying to comment, %s: %s' % (e.__class__.__name__, e.message))
-        else:
-            #logging.log(logging.INFO, 'Unmatched comment: %s' % c.body)
-            pass
-
         self.total_counter += 1
         if self.total_counter % 100 == 0:
-            logging.log(logging.INFO, 'Total comments considered: %d' % self.total_counter)
+            logging.log(logging.INFO, 'Total comments: %d\tMatched comments: %d' % (self.total_counter, self.match_counter))
+
+        comment_utf8 = comment.body.encode('utf-8')
+        normal = normalize_string(comment.body)
+        if comment_utf8 in self.mapping:
+            comment_text = comment_utf8
+        elif normal in self.mapping:
+            comment_text = normal
+        else:
+            #logging.log(logging.INFO, 'Unmatched comment: %s' % comment.body)
+            return
+
+        logging.log(logging.INFO, 'Matched comment: %s' % comment.body)
+        try:
+            data = self.mapping[comment_text]
+            reply = COMMENT_TEMPLATE % (data['line'], data['voice'], data['hero'])
+            comment.reply(reply)
+            logging.log(logging.INFO, 'Responded to comment: %s' % comment.body)
+            self.match_counter += 1
+
+            if self.match_counter % 10 == 0:
+                logging.log(logging.INFO, 'Total comments: %d\tMatched comments: %d' % (self.total_counter, self.match_counter))
+        except Exception as e:
+            logging.log(logging.ERROR, 'Error replying to comment, %s: %s' % (e.__class__.__name__, e.message))
+
 
     def main_loop(self):
         # Main loop, stream infinitely yields new comments
