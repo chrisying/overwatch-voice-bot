@@ -54,9 +54,12 @@ def ignore_comment(comment):
         return True
 
 def normalize_string(s):
-    # Converts unicdoe to ASCII, removes punctuation from string, lowercases
+    # Converts unicode to ASCII, removes punctuation from string, lowercases
     # Input must be unicode
-    return NORMALIZE_REGEX.sub('', unidecode.unidecode(s)).lower()
+    asci = unidecode.unidecode(s)
+    alpha = NORMALIZE_REGEX.sub('', alpha)
+    lower = alpha.lower()
+    return lower
 
 class VoiceLineBot:
 

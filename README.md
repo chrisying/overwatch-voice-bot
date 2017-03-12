@@ -16,7 +16,5 @@ Supported voice lines can be found at: https://docs.google.com/spreadsheets/d/1V
 ## TODO's:
 
 * Add more voice lines from [here](http://overwatch.gamepedia.com/Category:Quotations))
-* Figure out why the bot gets random HTTP 403's and gets stuck in exception loop
 * Add counter for voice line usage
-* Use [this](https://pypi.python.org/pypi/Unidecode) to decode unicode to ASCII for normalization
 
