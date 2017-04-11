@@ -1,6 +1,6 @@
 # Overwatch Voice Responses Reddit Bot
 
-__My voice response bot has been banned from the main /r/Overwatch subreddit. I've made multiple appeals to the mods but they seem to believe that the bot is not a good fit for the community. If you wish to see this bot become a reality, please let the subreddit mods know.__
+*My voice response bot has been banned from the main /r/Overwatch subreddit. I've made multiple appeals to the mods but they seem to believe that the bot is not a good fit for the community. If you wish to see this bot become a reality, please let the subreddit mods know.*
 
 A Reddit bot that scrapes [/r/Overwatch](http://reddit.com/r/overwatch) for hero quotes and responds with the appropriate voice line.
 
