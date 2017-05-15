@@ -19,4 +19,5 @@ Supported voice lines can be found at: https://docs.google.com/spreadsheets/d/1V
 
 * Add more voice lines from [here](http://overwatch.gamepedia.com/Category:Quotations))
 * Add counter for voice line usage
+* Due to the way PRAW fetches comments, some comments may be old. Ignore comment if older than some threshold.
 
