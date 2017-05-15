@@ -57,7 +57,7 @@ def normalize_string(s):
     # Converts unicode to ASCII, removes punctuation from string, lowercases
     # Input must be unicode
     asci = unidecode.unidecode(s)
-    alpha = NORMALIZE_REGEX.sub('', alpha)
+    alpha = NORMALIZE_REGEX.sub('', asci)
     lower = alpha.lower()
     return lower
 
